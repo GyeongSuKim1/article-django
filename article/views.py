@@ -42,10 +42,10 @@ class ArticleView(APIView):
     
     def put(self, request, article_id):
         data = request.data
-        article = ArticleModel.objects.get(id=article_id)
-        article_serializer = ArticleSerializer(article, data=data, partial=True)
-        
+
         try: 
+            article = ArticleModel.objects.get(id=article_id)
+            article_serializer = ArticleSerializer(article, data=data, partial=True)
             article_serializer.is_valid()
             article_serializer.save()
             return Response(
@@ -64,14 +64,14 @@ class ArticleView(APIView):
     
     
     def delete(self, request, article_id):
-        article = ArticleModel.objects.get(id=article_id)
-        
         try:
+            article = ArticleModel.objects.get(id=article_id)
             article.delete()
             return Response(
                 {"message": "게시글이 삭제되었습니다."}, status=status.HTTP_200_OK
                 )
-        except ArticleModel.DoesNotExist:
+            
+        except:
             return Response(
                 {"message": "존재하지않는 게시글입니다."}, status=status.HTTP_404_NOT_FOUND
                 )
