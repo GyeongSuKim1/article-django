@@ -18,14 +18,13 @@ class ArticleView(APIView):
 
     def post(self, request):
         data = request.data
-        print(f"data : {data}")
+        print(f"| data : {data}")
         article_serializer = ArticleSerializer(data=data)
-        print(f"serializer : {article_serializer}")
-        print(f"serializer : {ArticleSerializer.id}")
-        
+        print(f"| serializer : {article_serializer}")
+
         if article_serializer.is_valid():
             article_serializer.save()
-            return Response({f"message": " | 게시글이 작성되었습니다."}, status=status.HTTP_200_OK)
+            return Response({"message": "게시글이 작성되었습니다."}, status=status.HTTP_200_OK)
 
         print(f"Error : {article_serializer.errors}")
         return Response(article_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -45,6 +44,7 @@ class ArticleView(APIView):
         article = ArticleModel.objects.get(id=article_id)
         
         article.delete()
+        
         return Response({"message": "게시글이 삭제되었습니다."}, status=status.HTTP_200_OK)
     
     
@@ -52,4 +52,5 @@ class ArticleDetailView(APIView):
     def get(self, request, pk):
         article = ArticleModel.objects.get(id=pk)
         article_serializer = ArticleSerializer(article, many=False).data
+        
         return Response (article_serializer)
